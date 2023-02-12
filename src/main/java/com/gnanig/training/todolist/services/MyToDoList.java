@@ -15,13 +15,12 @@ public interface MyToDoList {
 
     String read();
 
-    String update(int serialNum, String newDate, String newTask);
+    int update(int serialNum, String newDate, String newTask);
 
-    String delete(int serialNum);
+    int delete(int serialNum);
 
-    String markComplete(int serialNum);
+    int markComplete(int serialNum);
 }
 
-// return type should be wrapped request response format
 
 

@@ -21,7 +21,8 @@ public class MyToDoListImpl implements MyToDoList {
         OriginalDateTask obj = new OriginalDateTask();
         obj.setDate(date);
         obj.setTask(to_do);
-        obj.setCompletionStatus("not completed");
+        if (date != null || to_do != null)
+            obj.setCompletionStatus("not completed");
         list.add(obj);
     }
 
@@ -31,56 +32,41 @@ public class MyToDoListImpl implements MyToDoList {
     }
 
     @Override
-    public String update(int serialNum, String newDate, String newTask) {
-        if (list.isEmpty()) {
-            return "List is empty, nothing to update.";
-        } else {
-            if (serialNum <= list.size()) {
-                OriginalDateTask obj = list.get(serialNum - 1);
+    public int update(int serialNum, String newDate, String newTask) {
+        if (serialNum <= list.size()) {
 
-                if (newTask != null && newDate != null) {
-                    obj.setTask(newTask);
-                    obj.setDate(newDate);
-                    return "Task updated successfully.";
-                } else if (newDate != null) {
-                    obj.setDate(newDate);
-                    return "Task updated successfully.";
-                } else if (newTask != null) {
-                    obj.setTask(newTask);
-                    return "Task updated successfully.";
-                } else
-                    return "No update done in the To-Do";
-            } else
-                return "Invalid serial number.";
-        }
+            OriginalDateTask obj = list.get(serialNum - 1);
+
+            if (newTask != null && newDate != null) {
+                obj.setTask(newTask);
+                obj.setDate(newDate);
+            } else if (newDate != null)
+                obj.setDate(newDate);
+            else if (newTask != null)
+                obj.setTask(newTask);
+            return 1;
+        } else
+            return 0;
     }
 
     @Override
-    public String markComplete(int serialNum) {
-        if (list.isEmpty()) {
-            return "List is empty, nothing to mark.";
-        } else {
-            if (serialNum <= list.size()) {
-                OriginalDateTask obj = list.get(serialNum - 1);
-                obj.setCompletionStatus("completed");
-                return "Task marked successfully.";
-            } else {
-                return "Invalid serial number.";
-            }
-        }
+    public int markComplete(int serialNum) {
+        if (serialNum <= list.size()) {
+            OriginalDateTask obj = list.get(serialNum - 1);
+            obj.setCompletionStatus("completed");
+            return 1;
+        } else
+            return 0;
     }
 
+
     @Override
-    public String delete(int serialNum) {
-        if (list.isEmpty()) {
-            return "List is empty, nothing to delete.";
+    public int delete(int serialNum) {
+        if (serialNum <= list.size()) {
+            list.remove(serialNum - 1);
+            return 1;
         } else {
-            if (serialNum <= list.size()) {
-                list.remove(serialNum - 1);
-                return "Task deleted successfully";
-            } else {
-                return "Invalid serial number.";
-            }
+            return 0;
         }
     }
 }
