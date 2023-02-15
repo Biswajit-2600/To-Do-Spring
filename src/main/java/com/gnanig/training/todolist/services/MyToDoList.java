@@ -11,15 +11,15 @@ package com.gnanig.training.todolist.services;
 
 public interface MyToDoList {
 
-    void create(String date, String to_do);
+    void create(String date, String task);
 
     String read();
 
-    int update(int serialNum, String newDate, String newTask);
+    void update(int serialNum, String newDate, String newTask, boolean newCompletionStatus);
 
-    int delete(int serialNum);
+    void delete(int serialNumber);
 
-    int markComplete(int serialNum);
+    boolean returnLength(int serialNumber);
 }
 
 

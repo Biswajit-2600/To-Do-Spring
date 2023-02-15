@@ -1,6 +1,6 @@
 package com.gnanig.training.todolist.database;
 
-import com.gnanig.training.todolist.RequestDataBody.OriginalDateTask;
+import com.gnanig.training.todolist.RequestDataBody.DateTaskData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,9 @@ public class MyToDoListData {
 
     static MyToDoListData obj = new MyToDoListData();
 
-    List<OriginalDateTask> toDo;
+    List<DateTaskData> toDo;
 
-    public List<OriginalDateTask> getToDo() {
+    public List<DateTaskData> getToDo() {
         return toDo;
     }
 

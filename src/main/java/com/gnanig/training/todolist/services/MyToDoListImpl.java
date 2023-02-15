@@ -1,6 +1,6 @@
 package com.gnanig.training.todolist.services;
 
-import com.gnanig.training.todolist.RequestDataBody.OriginalDateTask;
+import com.gnanig.training.todolist.RequestDataBody.DateTaskData;
 import com.gnanig.training.todolist.database.MyToDoListData;
 import com.google.gson.*;
 import org.springframework.stereotype.Component;
@@ -13,16 +13,25 @@ public class MyToDoListImpl implements MyToDoList {
 
     Scanner scn = new Scanner(System.in);
     MyToDoListData data = MyToDoListData.getInstance();
-    List<OriginalDateTask> list = data.getToDo();
+    List<DateTaskData> list = data.getToDo();
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Override
-    public void create(String date, String to_do) {
-        OriginalDateTask obj = new OriginalDateTask();
-        obj.setDate(date);
-        obj.setTask(to_do);
-        if (date != null || to_do != null)
+    public void create(String date, String task) {
+        DateTaskData obj = new DateTaskData();
+        if (task != null && date != null) {
+            obj.setDate(date);
+            obj.setTask(task);
             obj.setCompletionStatus("not completed");
+        } else if (date != null) {
+            obj.setDate(date);
+            obj.setTask("not provided");
+            obj.setCompletionStatus("not completed");
+        } else if (task != null) {
+            obj.setDate("not provided");
+            obj.setTask(task);
+            obj.setCompletionStatus("not completed");
+        }
         list.add(obj);
     }
 
@@ -32,41 +41,30 @@ public class MyToDoListImpl implements MyToDoList {
     }
 
     @Override
-    public int update(int serialNum, String newDate, String newTask) {
+    public void update(int serialNum, String newDate, String newTask, boolean newCompletionStatus) {
         if (serialNum <= list.size()) {
 
-            OriginalDateTask obj = list.get(serialNum - 1);
-
+            DateTaskData obj = list.get(serialNum - 1);
+            if (newCompletionStatus)
+                obj.setCompletionStatus("completed");
             if (newTask != null && newDate != null) {
-                obj.setTask(newTask);
                 obj.setDate(newDate);
+                obj.setTask(newTask);
             } else if (newDate != null)
                 obj.setDate(newDate);
             else if (newTask != null)
                 obj.setTask(newTask);
-            return 1;
-        } else
-            return 0;
-    }
-
-    @Override
-    public int markComplete(int serialNum) {
-        if (serialNum <= list.size()) {
-            OriginalDateTask obj = list.get(serialNum - 1);
-            obj.setCompletionStatus("completed");
-            return 1;
-        } else
-            return 0;
-    }
-
-
-    @Override
-    public int delete(int serialNum) {
-        if (serialNum <= list.size()) {
-            list.remove(serialNum - 1);
-            return 1;
-        } else {
-            return 0;
         }
+    }
+
+    @Override
+    public void delete(int serialNum) {
+        if (serialNum <= list.size())
+            list.remove(serialNum - 1);
+    }
+
+    @Override
+    public boolean returnLength(int serialNumber) {
+        return serialNumber <= list.size();
     }
 }
