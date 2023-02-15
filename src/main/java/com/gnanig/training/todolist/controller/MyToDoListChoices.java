@@ -66,8 +66,7 @@ public class MyToDoListChoices {
     @RequestMapping(path = {"delete/{serialNumber}"}, method = {RequestMethod.DELETE},
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> deleteToDo(@RequestBody DateTaskData requestData,
-                                             @PathVariable Integer serialNumber) {
+    public ResponseEntity<String> deleteToDo(@PathVariable Integer serialNumber) {
         if (myToDoList.returnLength(serialNumber)) {
             if (Objects.equals(myToDoList.read(), "[]"))
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(myToDoList.read());
