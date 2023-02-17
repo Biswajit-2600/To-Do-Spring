@@ -1,9 +1,14 @@
 package com.gnanig.training.todolist.RequestDataBody;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 public class DateTaskData {
 
     private String date, task, completionStatus, newDate, newTask;
-    Boolean newCompletionStatus;
+
+    private Boolean newCompletionStatus;
 
     public String getNewDate() {
         return newDate;
@@ -21,11 +26,11 @@ public class DateTaskData {
         this.newTask = newTask;
     }
 
-    public boolean getNewCompletionStatus() {
+    public Boolean getNewCompletionStatus() {
         return newCompletionStatus;
     }
 
-    public void setNewCompletionStatus(boolean newCompletionStatus) {
+    public void setNewCompletionStatus(Boolean newCompletionStatus) {
         this.newCompletionStatus = newCompletionStatus;
     }
 

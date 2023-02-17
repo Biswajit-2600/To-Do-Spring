@@ -13,7 +13,7 @@ public class MyToDoListImpl implements MyToDoList {
 
     Scanner scn = new Scanner(System.in);
     MyToDoListData data = MyToDoListData.getInstance();
-    List<DateTaskData> list = data.getToDo();
+    List<DateTaskData> toDolist = data.getToDo();
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Override
@@ -32,20 +32,20 @@ public class MyToDoListImpl implements MyToDoList {
             obj.setTask(task);
             obj.setCompletionStatus("not completed");
         }
-        list.add(obj);
+        toDolist.add(obj);
     }
 
     @Override
     public String read() {
-        return gson.toJson(list);
+        return gson.toJson(toDolist);
     }
 
     @Override
-    public void update(int serialNum, String newDate, String newTask, boolean newCompletionStatus) {
-        if (serialNum <= list.size()) {
+    public void update(int serialNum, String newDate, String newTask, Boolean newCompletionStatus) {
+        if (serialNum <= toDolist.size()) {
 
-            DateTaskData obj = list.get(serialNum - 1);
-            if (newCompletionStatus)
+            DateTaskData obj = toDolist.get(serialNum-1);
+            if (newCompletionStatus!=null && newCompletionStatus)
                 obj.setCompletionStatus("completed");
             if (newTask != null && newDate != null) {
                 obj.setDate(newDate);
@@ -59,12 +59,12 @@ public class MyToDoListImpl implements MyToDoList {
 
     @Override
     public void delete(int serialNum) {
-        if (serialNum <= list.size())
-            list.remove(serialNum - 1);
+        if (serialNum <= toDolist.size())
+            toDolist.remove(serialNum);
     }
 
     @Override
     public boolean returnLength(int serialNumber) {
-        return serialNumber <= list.size();
+        return serialNumber <= toDolist.size();
     }
 }

@@ -15,7 +15,7 @@ public interface MyToDoList {
 
     String read();
 
-    void update(int serialNum, String newDate, String newTask, boolean newCompletionStatus);
+    void update(int serialNum, String newDate, String newTask, Boolean newCompletionStatus);
 
     void delete(int serialNumber);
 

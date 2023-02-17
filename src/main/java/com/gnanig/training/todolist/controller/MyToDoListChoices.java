@@ -32,8 +32,8 @@ public class MyToDoListChoices {
 
     @RequestMapping(path = "read", method = {RequestMethod.GET}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> readToDo() {
-        if (Objects.equals(myToDoList.read(), "[]"))
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List is empty, " +
+        if (Objects.equals(myToDoList.read(), "{}"))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("To-Do list is empty, " +
                     "nothing to display.\n" + myToDoList.read());
         else
             return ResponseEntity.ok(myToDoList.read());
@@ -47,12 +47,12 @@ public class MyToDoListChoices {
                                              @PathVariable Integer serialNumber) {
         String tempNewDate = requestData.getNewDate();
         String tempNewTask = requestData.getNewTask();
-        boolean tempNewCompletionStatus = requestData.getNewCompletionStatus();
+        Boolean tempNewCompletionStatus = requestData.getNewCompletionStatus();
 
         if (myToDoList.returnLength(serialNumber)) {
-            if (Objects.equals(myToDoList.read(), "[]"))
+            if (Objects.equals(myToDoList.read(), "{}"))
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(myToDoList.read());
-            else if (tempNewDate == null && tempNewTask == null && !tempNewCompletionStatus) {
+            else if (tempNewDate == null && tempNewTask == null && tempNewCompletionStatus == null) {
                 myToDoList.update(serialNumber, tempNewDate, tempNewTask, tempNewCompletionStatus);
                 return ResponseEntity.ok("No modification done in the To-Do.\n" + myToDoList.read());
             } else {
