@@ -14,7 +14,7 @@ import java.util.List;
 class TodolistApplicationTests {
 
     MyToDoList obj = new MyToDoListImpl();
-    DateTaskData dateTask = new DateTaskData();
+//    DateTaskData dateTask = new DateTaskData();
 
     @Test
     void dateTaskTest() {
