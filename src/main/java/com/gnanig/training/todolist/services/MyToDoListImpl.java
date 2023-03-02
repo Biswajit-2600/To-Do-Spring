@@ -6,12 +6,10 @@ import com.google.gson.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Scanner;
 
 @Component
 public class MyToDoListImpl implements MyToDoList {
 
-    Scanner scn = new Scanner(System.in);
     MyToDoListData data = MyToDoListData.getInstance();
     List<DateTaskData> toDolist = data.getToDo();
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
