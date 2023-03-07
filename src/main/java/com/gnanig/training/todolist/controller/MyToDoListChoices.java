@@ -64,7 +64,6 @@ public class MyToDoListChoices {
     }
 
     @RequestMapping(path = {"delete/{serialNumber}"}, method = {RequestMethod.DELETE},
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> deleteToDo(@PathVariable Integer serialNumber) {
         if (myToDoList.returnLength(serialNumber)) {

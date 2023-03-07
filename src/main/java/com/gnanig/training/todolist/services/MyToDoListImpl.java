@@ -58,7 +58,7 @@ public class MyToDoListImpl implements MyToDoList {
     @Override
     public void delete(int serialNum) {
         if (serialNum <= toDolist.size())
-            toDolist.remove(serialNum);
+            toDolist.remove(serialNum-1);
     }
 
     @Override
