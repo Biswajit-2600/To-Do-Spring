@@ -1,11 +1,8 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -20,20 +17,15 @@ public class ToDoHttpClient {
         System.out.print("Enter the date : ");
         String date = scn.nextLine();
 
-        var values = new HashMap<String, String>() {{
-            put("task", task);
-            put("date", date);
-        }};
-
-        var objectMapper = new ObjectMapper();
-        String requestBody = objectMapper
-                .writeValueAsString(values);
+        String inputJson = "{\n" +
+                "\"date\":\"" + date + "\",\n" +
+                "\"task\":\"" + task + "\"\n}";
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/toDoList/create"))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .POST(HttpRequest.BodyPublishers.ofString(inputJson))
                 .build();
 
         HttpResponse<String> response = client.send(request,
@@ -58,50 +50,100 @@ public class ToDoHttpClient {
 
     static void update() throws IOException, InterruptedException {
 
+        int choice;
+        String newDate, newTask, inputJson = null, newCompletionStatus;
         Scanner scn = new Scanner(System.in);
 
-        System.out.println("Enter the serialNumber : ");
+
+        System.out.print("Enter the serialNumber : ");
         int serialNumber = scn.nextInt();
-        System.out.print("Enter the new task : ");
-        String newTask = scn.next();
-        System.out.print("Enter the new date : ");
-        String newDate = scn.next();
-        System.out.print("Enter the new date : ");
-        boolean newCompletionStatus = Boolean.parseBoolean(scn.next());
 
-
-        var values = new HashMap<String, String>() {{
-            put("task", newTask);
-            put("date", newDate);
-        }};
-
-        var objectMapper = new ObjectMapper();
-        String requestBody = objectMapper
-                .writeValueAsString(values);
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/toDoList/update"))
+        HttpClient tempClient = HttpClient.newHttpClient();
+        HttpRequest tempRequest = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/toDoList/update/" + serialNumber))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .PUT(HttpRequest.BodyPublishers.ofString("{}"))
                 .build();
 
-        HttpResponse<String> response = client.send(request,
+        HttpResponse<String> tempResponse = tempClient.send(tempRequest,
                 HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("\nResponse Status Code : " + response.statusCode());
-        System.out.println(response.body());
+
+
+        if (tempResponse.statusCode() == 404) {
+            System.out.println("\nResponse Status Code : " + tempResponse.statusCode());
+            System.out.println(tempResponse.body());
+        }
+
+        else {
+            System.out.println("\nWhat do you want to update? : \n");
+            System.out.print("""
+                    1 - Date only
+                    2 - Task only
+                    3 - Date and Task both
+                    4 - Completion Status
+
+                    Enter choice :\s""");
+            choice = scn.nextInt();
+            switch (choice) {
+                case 1 -> {
+                    scn.nextLine();
+                    System.out.print("Enter the new date : ");
+                    newDate = scn.nextLine();
+                    inputJson = "{\n" +
+                            "\"newDate\":\"" + newDate + "\"\n}";
+                }
+                case 2 -> {
+                    scn.nextLine();
+                    System.out.print("Enter the new task : ");
+                    newTask = scn.nextLine();
+                    inputJson = "{\n" +
+                            "\"newTask\":\"" + newTask + "\"\n}";
+                }
+                case 3 -> {
+                    scn.nextLine();
+                    System.out.print("Enter the new date : ");
+                    newDate = scn.nextLine();
+                    System.out.print("Enter the new task : ");
+                    newTask = scn.nextLine();
+                    inputJson = "{\n" +
+                            "\"newDate\":\"" + newDate + "\",\n" +
+                            "\"newTask\":\"" + newTask + "\"\n}";
+                }
+                case 4 -> {
+                    scn.nextLine();
+                    System.out.print("Enter the new completion status (true / false) : ");
+                    newCompletionStatus = scn.nextLine();
+                    inputJson = "{\n\"newCompletionStatus\":\"" + newCompletionStatus + "\"\n}";
+                }
+                default -> System.out.println("Invalid choice, enter again : ");
+            }
+
+            HttpClient client = HttpClient.newHttpClient();
+            assert inputJson != null;
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/toDoList/update/" + serialNumber))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(inputJson))
+                    .build();
+
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("\nResponse Status Code : " + response.statusCode());
+            System.out.println(response.body());
+        }
     }
 
     static void delete() throws IOException, InterruptedException {
 
         Scanner scn = new Scanner(System.in);
 
-        System.out.println("Enter the serialNumber : ");
+        System.out.print("Enter the serialNumber : ");
         int serialNumber = scn.nextInt();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/toDoList/delete/"+serialNumber))
+                .uri(URI.create("http://localhost:8080/toDoList/delete/" + serialNumber))
                 .DELETE()
                 .build();
         HttpClient client = HttpClient.newHttpClient();
@@ -152,3 +194,4 @@ public class ToDoHttpClient {
         System.out.println("\nThank you for using the to-do");
     }
 }
+

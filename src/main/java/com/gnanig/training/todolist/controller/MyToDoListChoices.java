@@ -32,7 +32,7 @@ public class MyToDoListChoices {
 
     @RequestMapping(path = "read", method = {RequestMethod.GET}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> readToDo() {
-        if (Objects.equals(myToDoList.read(), "{}"))
+        if (Objects.equals(myToDoList.read(), "[]"))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("To-Do list is empty, " +
                     "nothing to display.\n" + myToDoList.read());
         else
@@ -50,7 +50,7 @@ public class MyToDoListChoices {
         Boolean tempNewCompletionStatus = requestData.getNewCompletionStatus();
 
         if (myToDoList.returnLength(serialNumber)) {
-            if (Objects.equals(myToDoList.read(), "{}"))
+            if (Objects.equals(myToDoList.read(), "[]"))
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(myToDoList.read());
             else if (tempNewDate == null && tempNewTask == null && tempNewCompletionStatus == null) {
                 myToDoList.update(serialNumber, tempNewDate, tempNewTask, tempNewCompletionStatus);
